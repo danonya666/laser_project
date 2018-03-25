@@ -44,7 +44,6 @@ def find_laser_matrix_place(counter, height):
             while(counter[i] > 0):
                 square[num][0] += counter[i] # counting the square of the object
                 i += 1
-            i += 1
             num += 1 # going to the next item in square list
         i += 1
     square.sort(reverse = True) # sorting squares, biggest square is in [0]
