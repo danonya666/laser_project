@@ -11,10 +11,7 @@ def is_laser(pix):
 # should be used like find_laser(im_columns, im_rows, this_pix)
 # returns a list with the number of red pixels in every row
 def find_laser(width, height, pix):
-    r_counter = 0 #row counter counts the current row of our laser matrix
-    c_counter = 0 #column counter for the current column of our laser matrix
     counter = [] # counter of red pixels in a line
-    row_has_laser = [] # true if a row has a red pixel
 
     # initializing the lists
     for i in range(height):
@@ -23,11 +20,9 @@ def find_laser(width, height, pix):
         #countring red dots in lines
     for i in range(height):
         for j in range(width):
-            #print(i, j)
             r = pix[j, i][0] # red component of the pixel
             g = pix[j, i][1] # green component of the pixel
             b = pix[j, i][2] # blue component of the pixel
-            row_has_laser = 0  # int for finding out if the row has a laser pixel
             if (is_laser(r)): # if pixel is red enough
                 counter[i] += 1
 
@@ -41,7 +36,7 @@ def find_laser_matrix_place(counter, height):
     while(i < height):
         if(counter[i] > 0):  # if a line has red dots
             square.append([0, num]) # initializing a place in square list for this object
-            while(counter[i] > 0):
+            while(i < height and counter[i] > 0):
                 square[num][0] += counter[i] # counting the square of the object
                 i += 1
             num += 1 # going to the next item in square list
@@ -59,7 +54,6 @@ def get_laser_matrix(pix, position, width, height, counter):
     while(num != position or counter[i] == 0):
         if(counter[i] > 0):
             i += 1
-
             while(counter[i] != 0):
                 i += 1
             num += 1
@@ -82,7 +76,7 @@ def get_laser_matrix(pix, position, width, height, counter):
     return intensity
 
 
-this_image = Image.open('check.png')
+this_image = Image.open('screenshots\check.png')
 im_columns = this_image.width #Detect width
 im_rows = this_image.height #Detect height
 
