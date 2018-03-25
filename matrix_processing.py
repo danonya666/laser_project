@@ -7,9 +7,8 @@ def is_laser(pix):
         return 1
     else:
         return 0
-
-
-
+    
+    
 def find_laser(width, height, pix):
     #laser_matrix = [[]] # matrix where the laser pixels lie
     r_counter = 0 #row counter counts the current row of our laser matrix
@@ -68,8 +67,7 @@ height = j
 color attribute = k
 """
 
-#printing our picture by pixels to output.txt
-#just to check if everything is alright
+#Just some printing into a file
 for i in range(im_rows):
     f.write('\n')
     f.write('\n')
