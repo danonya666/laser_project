@@ -3,7 +3,7 @@ from PIL import Image
 
 #def for checking if a pixel is LASER
 def is_laser(pix):
-    if(pix > 80):
+    if(pix > 70):
         return 1
     else:
         return 0
@@ -63,7 +63,7 @@ def get_laser_matrix(pix, position, width, height, counter):
     pixel_counter = 0 # quantity of pixels in a laser
     intensity = 0 # = red_sum / pixel_counter
     j = 0
-    while(counter[i] != 0): # while we are in the laser
+    while(counter[i] != 0 and i < height - 1): # while we are in the laser
         while(j < width): # while we are in the row
             while(not is_laser(pix[j, i][0]) and j < width - 1):
                 j += 1 # this skips the black dots in a row
@@ -76,21 +76,39 @@ def get_laser_matrix(pix, position, width, height, counter):
     return intensity
 
 
-this_image = Image.open('screenshots\check.png')
-im_columns = this_image.width #Detect width
-im_rows = this_image.height #Detect height
+
 
 """
 im_columns = the number of columns in a picture
 im_rows = the number of rows in a picture
 """
 
-this_pix = this_image.load()    #remember, [columns, rows]
+#this_pix = this_image.load()    #remember, [columns, rows]
 
-counter = find_laser(im_columns, im_rows, this_pix) # the list with the numbers of red dots in each row
-position = find_laser_matrix_place(counter, im_rows) # the place of the matrix
-print(get_laser_matrix(this_pix, position, im_columns, im_rows, counter)) # printing the intensity
+#print(get_laser_matrix(this_pix, position, im_columns, im_rows, counter)) # printing the intensity
 
+sum41 = 0
+values = []
+kek = 50
+for i in range(kek):
+    this_image = Image.open('screenshots\\dtest' + str(i) + '.png')
+    this_pix = this_image.load()
+    im_columns = this_image.width  # Detect width
+    im_rows = this_image.height  # Detect height
+    counter = find_laser(im_columns, im_rows, this_pix)  # the list with the numbers of red dots in each row
+    position = find_laser_matrix_place(counter, im_rows)  # the place of the matrix
+    f.write(str(get_laser_matrix(this_pix, position, im_columns, im_rows, counter)) + '\n')   # printing the intensity
+    values.append(get_laser_matrix(this_pix, position, im_columns, im_rows, counter))
+    sum41 += (get_laser_matrix(this_pix, position, im_columns, im_rows, counter))
+
+sum41 = sum41 / kek
+delta = 0
+for i in values:
+    delta += abs(i - sum41)
+f.write("delta = " + str(delta / kek) + '\n')
+f.write("end of test" + "\n" + "//////////////////" + '\n')
+
+#print(delta)
 """
 #Just some printing into a file
 for i in range(im_rows):
