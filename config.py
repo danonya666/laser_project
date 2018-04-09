@@ -42,8 +42,43 @@ def find_laser_matrix_place(counter, height):
     square.sort(reverse = True) # sorting squares, biggest square is in [0]
     return square[0][1] # returning the place of the laser
 
+def find_laser_matrix_centre(pix, counter, position):
+    num = 0
+    i = 0  # putting i counter to the place of the laser
+    while (num != position or counter[i] == 0):
+        if (counter[i] > 0):
+            i += 1
+            while (counter[i] != 0):
+                i += 1
+            num += 1
+        i += 1
+    laser_start = -1
+    laser_end = -1
+    laser_length = -1
+    laser_height = -1
+    laser_start_i = i
+    laser_middle_i = -1
+    while(counter[i] > 0):
+        laser_height += 1
+        i += 1
+    laser_middle_i = laser_start_i + laser_height / 2
+    j = 0
+    r = pix[j, i][0]
+    i = laser_middle_i
+    while(not is_laser(r)):
+        j += 1
+        r = pix[j, i][0]
+    laser_start = j
+    while(is_laser(r)):
+        j += 1
+        r = pix[j, i][0]
+    laser_end = j
+    laser_length = laser_end - laser_start
+    laser_middle = laser_start + laser_length / 2
+    laser_middle_position = [laser_middle, laser_middle_i, laser_length]
+    return laser_middle_position
+
 # function for returning the medium intensity of the laser
-# SHOULD BE RENAMED
 # position - result of the function find_laser_matrix_place
 # counter - result of the function find_laser
 def medium_intensity(pix, position, width, height, counter):
