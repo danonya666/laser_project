@@ -75,29 +75,23 @@ def find_laser_matrix_centre(pix, counter, position):
     laser_end = j
     laser_length = laser_end - laser_start
     laser_middle = laser_start + laser_length / 2
-    laser_middle_position = [laser_middle, laser_middle_i, laser_length]
+    laser_middle_position = [int(laser_middle), int(laser_middle_i), int(laser_length), int(laser_height)]
     return laser_middle_position
 
 # function for returning the medium intensity of the laser
 # position - result of the function find_laser_matrix_place
 # counter - result of the function find_laser
-def medium_intensity(pix, position, width, height, counter):
+def medium_intensity(pix, width, height, counter, laser_middle_position):
     num = 0
-    i = 0 # putting i counter to the place of the laser
-    while(num != position or counter[i] == 0):
-        if(counter[i] > 0):
-            i += 1
-            while(counter[i] != 0):
-                i += 1
-            num += 1
-        i += 1
 
     red_sum = 0 # sum of the red component in a laser
     pixel_counter = 0 # quantity of pixels in a laser
     intensity = 0 # = red_sum / pixel_counter
-    j = 0
-    while(counter[i] != 0 and i < height - 1): # while we are in the laser
-        while(j < width): # while we are in the row
+    j_start = j = laser_middle_position[0]
+    i_start = i = laser_middle_position[1]
+    print(laser_middle_position[0], laser_middle_position[1], laser_middle_position[2], laser_middle_position[3])
+    while(i < i_start + laser_middle_position[3] / 3): # while we are in the laser
+        while(j < j_start + laser_middle_position[2] / 3): # while we are in the row
             while(not is_laser(pix[j, i][0]) and j < width - 1):
                 j += 1 # this skips the black dots in a row
             red_sum += pix[j, i][0]
@@ -119,5 +113,6 @@ def multiple_images_to_file(quantity, basic_location, name, ending):
         counter = red_component_in_lines(im_columns, im_rows, this_pix)  # the list with the numbers of red dots in each row
         position = find_laser_matrix_place(counter, im_rows)  # the place of the matrix
         current_time = str(datetime.datetime.now())
-        f.write(str("%.2f" % medium_intensity(this_pix, position, im_columns, im_rows, counter)) + ' - ' + current_time + '\n')   # printing the intensity
+        laser_middle_position = find_laser_matrix_centre(this_pix, counter, position)
+        f.write(str("%.2f" % medium_intensity(this_pix, im_columns, im_rows, counter, laser_middle_position)) + ' - ' + current_time + '\n')   # printing the intensity
     f.write("//////////////////" + '\n' + "end of log")

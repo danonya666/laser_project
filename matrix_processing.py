@@ -1,7 +1,12 @@
 from config import *
 
 multiple_images_to_file(50, "screenshots", "dtest", ".png")
-
+this_image = Image.open("check.png")
+this_pix = this_image.load()
+im_columns = this_image.width  # Detect width
+im_rows = this_image.height  # Detect height
+counter = red_component_in_lines(im_columns, im_rows, this_pix)
+print(find_laser_matrix_centre(this_pix, counter, find_laser_matrix_place(counter, im_rows)))
 
 #this_pix = this_image.load()    #remember, [columns, rows]
 """
