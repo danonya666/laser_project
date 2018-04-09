@@ -83,13 +83,11 @@ def find_laser_matrix_centre(pix, counter, position):
 # counter - result of the function find_laser
 def medium_intensity(pix, width, height, counter, laser_middle_position):
     num = 0
-
     red_sum = 0 # sum of the red component in a laser
     pixel_counter = 0 # quantity of pixels in a laser
     intensity = 0 # = red_sum / pixel_counter
     j_start = j = laser_middle_position[0]
     i_start = i = laser_middle_position[1]
-    print(laser_middle_position[0], laser_middle_position[1], laser_middle_position[2], laser_middle_position[3])
     while(i < i_start + laser_middle_position[3] / 3): # while we are in the laser
         while(j < j_start + laser_middle_position[2] / 3): # while we are in the row
             while(not is_laser(pix[j, i][0]) and j < width - 1):
@@ -104,7 +102,7 @@ def medium_intensity(pix, width, height, counter, laser_middle_position):
 
 #print(get_laser_matrix(this_pix, position, im_columns, im_rows, counter)) # printing the intensity
 def multiple_images_to_file(quantity, basic_location, name, ending):
-    f.write("Logging the changes in laser intensity\n//////////////////")
+    f.write("Logging the changes in laser intensity\n//////////////////\n")
     for i in range(quantity):
         this_image = Image.open(basic_location + "\\" + name + str(i) + ending)
         this_pix = this_image.load()
