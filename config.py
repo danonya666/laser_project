@@ -154,7 +154,7 @@ def auto_image_graph():
             canv.create_text(k + 515, -10 + 500, text=str(k), fill="purple", font=("Helvectica", "10"))
             if (k != 0):
                 canv.create_line(-3 + 500, k + 500, 3 + 500, k + 500, width=0.5, fill='black')
-                canv.create_text(20 + 500, k + 500, text=str(k), fill="purple", font=("Helvectica", "10"))
+                canv.create_text(-25 + 500, k + 500, text=str(k), fill="purple", font=("Helvectica", "10"))
         try:
             x = First_x + (1 / 16) * i
             new_f = f.replace('x', str(x))
@@ -162,6 +162,9 @@ def auto_image_graph():
             x += 500
         except:
             pass
+    prev_x = 0
+    prev_y = 0
+
     while True:
         time.sleep(1)
         return_value, image = camera.read()
@@ -171,7 +174,7 @@ def auto_image_graph():
             break
         cv2.imwrite('im.png', image)
         print('photo taken ', it)
-        it += 10
+        it += 2
         this_image = Image.open("im.png")
         this_pix = this_image.load()
         im_columns = this_image.width  # Detect width
@@ -182,7 +185,10 @@ def auto_image_graph():
         current_time = str(datetime.datetime.now())
         laser_middle_position = find_laser_matrix_centre(this_pix, counter, position, im_rows, im_columns)
         laser_medium_intensity = medium_intensity(this_pix, im_columns, im_rows, counter, laser_middle_position)
-        put_dot(it, laser_medium_intensity, canv, 5, 500)
+        put_dot(it, laser_medium_intensity, canv, 1, 500)
+        canv.create_line(500 + prev_x, 500 - prev_y, 500 + it, 500 - laser_medium_intensity, smooth = 1, width = 3, fill = "red")
+        prev_x = it
+        prev_y = laser_medium_intensity
         canv.pack()
         canv.update()
 
